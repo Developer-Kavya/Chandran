@@ -1,0 +1,79 @@
+import React, { useState } from 'react';
+
+const Show = ({ show }) => {
+  const {
+    name,
+    type,
+    genres,
+    status,
+    premiered,
+    rating,
+    summary,
+    image,
+    url
+  } = show;
+
+  return (
+    <div className="show">
+      <h2>{name}</h2>
+      <img src={image && image.medium} alt={name} />
+      <p>Type: {type}</p>
+      <p>Genres: {genres.join(', ')}</p>
+      <p>Status: {status}</p>
+      <p>Premiered: {premiered}</p>
+      {rating && <p>Rating: {rating.average}</p>}
+      <p>Summary: {summary.replace(/<[^>]*>/g, '')}</p>
+      <a href={url} target="_blank" rel="noopener noreferrer">More Info</a>
+    </div>
+  );
+};
+
+const TVShows = ({ shows }) => (
+  <div className="container">
+    {shows.map((show, index) => (
+      <Show key={index} show={show.show} />
+    ))}
+  </div>
+);
+
+const Search = ({ handleSearch }) => {
+  const [query, setQuery] = useState('');
+
+  const handleChange = (event) => {
+    setQuery(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    handleSearch(query);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={query}
+        onChange={handleChange}
+        placeholder="Search for a show..."
+      />
+      <button type="submit">Search</button>
+    </form>
+  );
+};
+
+export default function App() {
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearch = (query) => {
+    // Perform search logic here, for example, filtering the shows based on the query
+    const results = [];
+    setSearchResults(results);
+  };
+
+  return (
+    <div>
+      <Search handleSearch={handleSearch} />
+      <TVShows shows={searchResults} />
+    </div>
+  );
+}
